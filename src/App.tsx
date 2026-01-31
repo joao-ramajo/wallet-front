@@ -4,6 +4,7 @@ import { LoginPage } from "./features/auth/pages/LoginPage";
 import { RegisterPage } from "./features/auth/pages/RegisterPage";
 import { DashbaordPage } from "./features/dashboard/pages/DashboardPage";
 import { Home } from "./features/landing/pages/Home";
+import { AboutPage } from "./features/landing/pages/AboutPage";
 
 export default function App() {
 	return (
@@ -14,7 +15,8 @@ export default function App() {
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/cadastre-se" element={<RegisterPage />} />
 					<Route path="/dashboard" element={<DashbaordPage />} />
-				</Routes>
+					<Route path="/apoie" element={<AboutPage />} />
+  				</Routes>
 			</MainLayout>
 		</BrowserRouter>
 	);
