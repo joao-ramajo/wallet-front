@@ -1,14 +1,18 @@
-// components/FinancialSummary.tsx
-import {
-	Box,
-	Button,
-	Card,
-	CardContent,
-	Container,
-	Typography,
-} from "@mui/material";
+import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import TrendingDownIcon from "@mui/icons-material/TrendingDown";
+import TrendingUpIcon from "@mui/icons-material/TrendingUp";
+import { Box, Card, CardContent, Container, Typography } from "@mui/material";
+import toast from "react-hot-toast";
+import { formatCurrency } from "../../../utils/formatCurrency";
+import { useGetSummaryQuery } from "../hooks/useGetSummary";
 
 export function FinancialSummary() {
+	const { data, isPending, isError } = useGetSummaryQuery();
+
+	if (isError) {
+		toast.error("Erro ao buscar resumos.");
+	}
+
 	return (
 		<Box component="section" sx={{ py: 10 }}>
 			<Container maxWidth="lg">
@@ -28,31 +32,39 @@ export function FinancialSummary() {
 				>
 					<Card sx={{ flex: 1, minWidth: 220 }}>
 						<CardContent>
-							<Typography variant="subtitle2">Total recebido</Typography>
-							<Typography variant="h6">R$ 5.143,92</Typography>
+							<Box display="flex" alignItems="center" gap={1}>
+								<TrendingUpIcon fontSize="small" />
+								<Typography variant="subtitle2">Total recebido</Typography>
+							</Box>
+							<Typography variant="h6">
+								{isPending ? "-" : formatCurrency(data?.total_receive)}
+							</Typography>
 						</CardContent>
 					</Card>
 
 					<Card sx={{ flex: 1, minWidth: 220 }}>
 						<CardContent>
-							<Typography variant="subtitle2">Total gasto</Typography>
-							<Typography variant="h6">R$ 142,75</Typography>
+							<Box display="flex" alignItems="center" gap={1}>
+								<TrendingDownIcon fontSize="small" />
+								<Typography variant="subtitle2">Total gasto</Typography>
+							</Box>
+							<Typography variant="h6">
+								{isPending ? "-" : formatCurrency(data?.total_expense)}
+							</Typography>
 						</CardContent>
 					</Card>
 
 					<Card sx={{ flex: 1, minWidth: 220 }}>
 						<CardContent>
-							<Typography variant="subtitle2">Saldo esperado</Typography>
-							<Typography variant="h6">R$ 4.859,28</Typography>
+							<Box display="flex" alignItems="center" gap={1}>
+								<AccountBalanceWalletIcon fontSize="small" />
+								<Typography variant="subtitle2">Saldo esperado</Typography>
+							</Box>
+							<Typography variant="h6">
+								{isPending ? "-" : formatCurrency(data?.expected_total)}
+							</Typography>
 						</CardContent>
 					</Card>
-				</Box>
-
-				{/* Botão */}
-				<Box textAlign="center">
-					<Button variant="contained" size="large">
-						Acessar dashboard
-					</Button>
 				</Box>
 			</Container>
 		</Box>

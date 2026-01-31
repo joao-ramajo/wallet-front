@@ -1,4 +1,5 @@
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const token = localStorage.getItem("WALLETTOKEN");
 
@@ -23,7 +24,7 @@ instance.interceptors.response.use(
 	(response) => response,
 	(error) => {
 		if (error.response?.status === 401) {
-			window.location.href = "/login";
+			toast.error("Erro de autenticação.");
 			return Promise.reject(error);
 		}
 

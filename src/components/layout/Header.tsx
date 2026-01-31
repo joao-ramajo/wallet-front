@@ -12,7 +12,6 @@ import {
 	List,
 	ListItem,
 	ListItemButton,
-	ListItemIcon,
 	ListItemText,
 	Slide,
 	Toolbar,
