@@ -44,10 +44,7 @@ export interface Pagination {
 	pageIndex: number;
 }
 
-export type ApiError = {
-	message?: string;
-	errors?: {
-		input: string;
-		message: string;
-	}[];
+export type LaravelValidationError = {
+	message: string;
+	errors: Record<string, string[]>;
 };

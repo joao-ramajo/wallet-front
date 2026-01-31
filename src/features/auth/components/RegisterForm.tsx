@@ -12,7 +12,7 @@ import type { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
-import type { ApiError } from "../../../api/instance";
+import type { LaravelValidationError } from "../../../api/instance";
 import { useRegisterMutation } from "../hooks/useRegister";
 import {
 	type RegisterFormData,
@@ -35,16 +35,15 @@ export function RegisterForm() {
 		console.log("dados válidos:", data);
 
 		registerMutation.mutate(data, {
-			onError: (error: AxiosError<ApiError>) => {
+			onError: (error: AxiosError<LaravelValidationError>) => {
 				const status = error.response?.status;
-
 				const apiError = error.response?.data;
 
-				if (status === 400 && apiError?.errors) {
-					apiError.errors.forEach((err) => {
-						setError(err.input as keyof RegisterFormData, {
+				if (status === 422 && apiError?.errors) {
+					Object.entries(apiError.errors).forEach(([field, messages]) => {
+						setError(field as keyof RegisterFormData, {
 							type: "server",
-							message: err.message,
+							message: messages[0],
 						});
 					});
 				} else if (apiError?.message && status === 400) {
