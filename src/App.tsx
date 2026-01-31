@@ -5,6 +5,7 @@ import { RegisterPage } from "./features/auth/pages/RegisterPage";
 import { DashbaordPage } from "./features/dashboard/pages/DashboardPage";
 import { AboutPage } from "./features/landing/pages/AboutPage";
 import { Home } from "./features/landing/pages/Home";
+import { PrivateRoute } from "./router/PrivateRoute";
 
 export default function App() {
 	return (
@@ -14,7 +15,14 @@ export default function App() {
 					<Route path="/" element={<Home />} />
 					<Route path="/login" element={<LoginPage />} />
 					<Route path="/cadastre-se" element={<RegisterPage />} />
-					<Route path="/dashboard" element={<DashbaordPage />} />
+					<Route
+						path="/dashboard"
+						element={
+							<PrivateRoute>
+								<DashbaordPage />
+							</PrivateRoute>
+						}
+					/>
 					<Route path="/apoie" element={<AboutPage />} />
 				</Routes>
 			</MainLayout>
