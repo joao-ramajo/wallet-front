@@ -40,6 +40,8 @@ const data = [
 ];
 
 export function RecentExpenses() {
+
+	return <>Em desenvolvimento</>
 	return (
 		<Box component="section" sx={{ py: 10 }}>
 			<Container maxWidth="lg">
