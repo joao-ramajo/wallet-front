@@ -7,6 +7,7 @@ import {
 	Stack,
 	Typography,
 } from "@mui/material";
+import { useExpenseModalContext } from "../context/ExpenseModalContextProvider";
 import { type Expense, useGetExpensesQuery } from "../hooks/useGetExpense";
 import { ErrorState } from "./ErrorState";
 import { ExpenseItem } from "./ExpenseItem";
@@ -59,6 +60,7 @@ export function RecentExpenses() {
 	const { data, isLoading, isError, refetch } = useGetExpensesQuery();
 
 	const hasData = data && data.length > 0;
+	const { selectAction } = useExpenseModalContext();
 
 	return (
 		<Box component="section" sx={{ py: { xs: 6, md: 10 } }}>
@@ -137,6 +139,7 @@ export function RecentExpenses() {
 								minWidth: { sm: 140 },
 							}}
 							disabled={isLoading}
+							onClick={() => selectAction("create")}
 						>
 							Nova despesa
 						</Button>
