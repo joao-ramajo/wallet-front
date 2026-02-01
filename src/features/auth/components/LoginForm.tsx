@@ -39,7 +39,7 @@ export function LoginForm() {
 			onSuccess: (response) => {
 				toast.success(response.message);
 				login(response);
-				navigate("/");
+				navigate("/dashboard");
 			},
 			onError: (error: AxiosError<LaravelValidationError>) => {
 				const status = error.response?.status;
