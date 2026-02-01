@@ -1,11 +1,25 @@
 import {
+	AttachMoney,
 	CalendarMonth,
 	Category as CategoryIcon,
 	CheckCircle,
+	Delete,
+	Edit,
 	Schedule,
 } from "@mui/icons-material";
-import { alpha, Box, Chip, Paper, Typography, useTheme } from "@mui/material";
+import {
+	alpha,
+	Box,
+	Chip,
+	IconButton,
+	Paper,
+	Stack,
+	Tooltip,
+	Typography,
+	useTheme,
+} from "@mui/material";
 import { formatCurrency } from "../../../utils/formatCurrency";
+import { useExpenseModalContext } from "../context/ExpenseModalContextProvider";
 import type { Expense } from "../hooks/useGetExpense";
 
 type ExpenseItemProps = {
@@ -39,7 +53,6 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 	const status = statusConfig[expense.status];
 	const isIncome = expense.type === "income";
 
-	// Formatar datas para melhor visualização
 	const formatDate = (dateString: string | null) => {
 		if (!dateString) return null;
 		const date = new Date(dateString);
@@ -49,11 +62,15 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 		});
 	};
 
+	const { selectAction } = useExpenseModalContext();
+
 	return (
 		<Paper
 			elevation={0}
 			sx={{
-				p: { xs: 2, sm: 2.5 },
+				px: { xs: 2, sm: 2.5 },
+				py: { xs: 1, sm: 1.5 },
+				// px: {}
 				border: "1px solid",
 				borderColor: "divider",
 				borderRadius: 2,
@@ -87,6 +104,59 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 			onClick={onClick}
 		>
 			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+					mb: 1,
+				}}
+			>
+				<Typography
+					variant="subtitle1"
+					fontWeight={600}
+					sx={{
+						mb: 0.5,
+						overflow: "hidden",
+						textOverflow: "ellipsis",
+						whiteSpace: "nowrap",
+						fontSize: { xs: "1rem", sm: "1.05rem" },
+					}}
+				>
+					{expense.title}
+				</Typography>
+				<Stack
+					direction="row"
+					spacing={1}
+					sx={{
+						bgcolor: "#F8FAFC",
+						borderRadius: 2,
+						px: 1,
+						border: "1px solid #E5E7EB",
+					}}
+				>
+					<Tooltip title="Editar" onClick={() => selectAction("edit", expense)}>
+						<IconButton size="small">
+							<Edit fontSize="small" />
+						</IconButton>
+					</Tooltip>
+
+					<Tooltip title="Marcar como pago">
+						<IconButton size="small" onClick={() => console.log()}>
+							<AttachMoney fontSize="small" />
+						</IconButton>
+					</Tooltip>
+
+					<Tooltip title="Excluir">
+						<IconButton
+							size="small"
+							color="error"
+							onClick={() => console.log()}
+						>
+							<Delete fontSize="small" />
+						</IconButton>
+					</Tooltip>
+				</Stack>
+			</Box>
+			<Box
 				display="flex"
 				flexDirection={{ xs: "column", sm: "row" }}
 				gap={{ xs: 2, sm: 3 }}
@@ -94,19 +164,6 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 			>
 				{/* Seção Principal - Título e Categoria */}
 				<Box flex={1} minWidth={0}>
-					<Typography
-						variant="subtitle1"
-						fontWeight={600}
-						sx={{
-							mb: 0.5,
-							overflow: "hidden",
-							textOverflow: "ellipsis",
-							whiteSpace: "nowrap",
-							fontSize: { xs: "1rem", sm: "1.05rem" },
-						}}
-					>
-						{expense.title}
-					</Typography>
 					<Box display="flex" alignItems="center" gap={0.5}>
 						<CategoryIcon
 							sx={{

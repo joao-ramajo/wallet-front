@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-export const createExpenseSchema = z.object({
+export const updateExpenseSchema = z.object({
+	id: z.number(),
 	title: z.string().min(1, "A descrição é obrigatória"),
 	amount: z
 		.number()
@@ -10,4 +11,4 @@ export const createExpenseSchema = z.object({
 	status: z.enum(["paid", "pending", "overdue"]),
 });
 
-export type CreateExpenseFormData = z.infer<typeof createExpenseSchema>;
+export type UpdateExpenseFormData = z.infer<typeof updateExpenseSchema>;

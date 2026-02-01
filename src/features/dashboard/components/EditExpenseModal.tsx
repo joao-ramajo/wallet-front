@@ -25,22 +25,24 @@ import {
 import type { TransitionProps } from "@mui/material/transitions";
 import { useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { LaravelValidationError } from "../../../api/instance";
+import type { Expense } from "../hooks/useGetExpense";
 import {
-	type CreateExpenseResponse,
-	useCreateExpenseMutation,
-} from "../hooks/useCreateExpense";
+	type UpdateExpenseResponse,
+	useUpdateExpenseMutation,
+} from "../hooks/useUpdateExpenseMutation";
 import {
-	type CreateExpenseFormData,
-	createExpenseSchema,
-} from "../schemas/createExpense.schema";
+	type UpdateExpenseFormData,
+	updateExpenseSchema,
+} from "../schemas/updateExpense.schema";
 
-type CreateExpenseModalProps = {
+type EditExpenseModalProps = {
 	open: boolean;
 	onClose: () => void;
+	expense?: Expense;
 };
 
 const Transition = React.forwardRef(function Transition(
@@ -50,7 +52,11 @@ const Transition = React.forwardRef(function Transition(
 	return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
+export function EditExpenseModal({
+	open,
+	onClose,
+	expense,
+}: EditExpenseModalProps) {
 	const {
 		register,
 		handleSubmit,
@@ -59,12 +65,8 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 		formState: { errors },
 		reset,
 		setError,
-	} = useForm<CreateExpenseFormData>({
-		resolver: zodResolver(createExpenseSchema),
-		defaultValues: {
-			type: "expense",
-			status: "pending",
-		},
+	} = useForm<UpdateExpenseFormData>({
+		resolver: zodResolver(updateExpenseSchema),
 	});
 
 	const [amountDisplay, setAmountDisplay] = useState("");
@@ -73,7 +75,7 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 	const status = watch("status");
 	const amount = watch("amount");
 
-	const { mutateAsync } = useCreateExpenseMutation();
+	const { mutateAsync } = useUpdateExpenseMutation();
 	const queryClient = useQueryClient();
 
 	function handleAmountChange(value: string) {
@@ -90,9 +92,26 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 		setAmountDisplay(formatted);
 	}
 
-	function onSubmit(data: CreateExpenseFormData) {
+	useEffect(() => {
+		if (!expense) return;
+
+		setValue("id", expense.id);
+		setValue("title", expense.title);
+		setValue("type", expense.type);
+		setValue("status", expense.status);
+		setValue("amount", expense.amount);
+
+		const formatted = (expense.amount / 100).toLocaleString("pt-BR", {
+			style: "currency",
+			currency: "BRL",
+		});
+
+		setAmountDisplay(formatted);
+	}, [expense, setValue]);
+
+	function onSubmit(data: UpdateExpenseFormData) {
 		mutateAsync(data, {
-			onSuccess: (response: CreateExpenseResponse) => {
+			onSuccess: (response: UpdateExpenseResponse) => {
 				toast.success(response.message);
 				queryClient.invalidateQueries({
 					queryKey: ["dashboard-expenses"],
@@ -108,7 +127,7 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 
 				if (status === 422 && apiError?.errors) {
 					Object.entries(apiError.errors).forEach(([field, messages]) => {
-						setError(field as keyof CreateExpenseFormData, {
+						setError(field as keyof UpdateExpenseFormData, {
 							type: "server",
 							message: messages[0],
 						});
@@ -134,7 +153,6 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 			onClose={handleClose}
 			fullWidth
 			maxWidth="sm"
-			dashboard-summary
 			TransitionComponent={Transition}
 		>
 			<form onSubmit={handleSubmit(onSubmit)}>
