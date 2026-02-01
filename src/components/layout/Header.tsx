@@ -98,11 +98,7 @@ export function Header() {
 								alignItems: "center",
 							}}
 						>
-							<img
-            src="/logo-negativo.svg"
-            alt="Kado"
-            style={{ height: 62 }}
-          />
+							<img src="/logo-negativo.svg" alt="Kado" style={{ height: 62 }} />
 						</Link>
 
 						{/* Desktop menu */}
