@@ -12,6 +12,8 @@ import { type Expense, useGetExpensesQuery } from "../hooks/useGetExpense";
 import { ErrorState } from "./ErrorState";
 import { ExpenseItem } from "./ExpenseItem";
 import { ExpenseItemSkeleton } from "./ExpenseItemSkeleton";
+import { instance } from "../../../api/instance";
+
 
 const EmptyState = () => {
 	return (
@@ -55,6 +57,51 @@ const EmptyState = () => {
 		</Paper>
 	);
 };
+
+export async function downloadExpensesCsv() {
+	try {
+		const response = await instance.get(
+			"/dashboard/spreadsheet/csv/export",
+			{ responseType: "blob" }
+		);
+
+		// Pegar o nome do arquivo do header Content-Disposition (se disponível)
+		const contentDisposition = response.headers["content-disposition"];
+		let filename = "despesas.csv";
+		
+		if (contentDisposition) {
+			const filenameMatch = contentDisposition.match(/filename="?(.+)"?/);
+			if (filenameMatch?.[1]) {
+				filename = filenameMatch[1];
+			}
+		}
+
+		// Adicionar timestamp ao nome do arquivo
+		const timestamp = new Date().toISOString().split("T")[0];
+		filename = `despesas_${timestamp}.csv`;
+
+		// Criar blob e fazer download
+		const blob = new Blob([response.data], { type: "text/csv;charset=utf-8;" });
+		const url = window.URL.createObjectURL(blob);
+
+		const a = document.createElement("a");
+		a.style.display = "none";
+		a.href = url;
+		a.download = filename;
+		
+		document.body.appendChild(a);
+		a.click();
+		
+		// Cleanup
+		document.body.removeChild(a);
+		window.URL.revokeObjectURL(url);
+
+		return { success: true, filename };
+	} catch (error) {
+		console.error("Erro ao baixar CSV:", error);
+		throw error;
+	}
+}
 
 export function RecentExpenses() {
 	const { data, isLoading, isError, refetch } = useGetExpensesQuery();
@@ -113,6 +160,7 @@ export function RecentExpenses() {
 								minWidth: { xs: "auto", sm: 120 },
 							}}
 							disabled={isLoading}
+							onClick={downloadExpensesCsv}
 						>
 							Exportar
 						</Button>
