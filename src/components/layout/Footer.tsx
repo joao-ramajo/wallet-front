@@ -89,6 +89,9 @@ export function Footer() {
 						<Box sx={{ display: "flex", gap: 1 }}>
 							<IconButton
 								size="small"
+								onClick={() =>
+									window.open("https://github.com/joao-ramajo/kado", "_blank")
+								}
 								sx={{
 									bgcolor: "#F8FBFF",
 									color: "#0066FF",
@@ -100,6 +103,12 @@ export function Footer() {
 								<GitHub fontSize="small" />
 							</IconButton>
 							<IconButton
+								onClick={() =>
+									window.open(
+										"https://www.linkedin.com/in/joao-ramajo",
+										"_blank",
+									)
+								}
 								size="small"
 								sx={{
 									bgcolor: "#F8FBFF",
@@ -333,7 +342,7 @@ export function Footer() {
 							justifyContent: "center",
 						}}
 					>
-						<Link
+						{/* <Link
 							href="#"
 							underline="none"
 							sx={{
@@ -346,9 +355,9 @@ export function Footer() {
 							}}
 						>
 							Privacidade
-						</Link>
+						</Link> */}
 						<Link
-							href="#"
+							href="/termos-e-condicoes"
 							underline="none"
 							sx={{
 								color: "#9CA3AF",
@@ -361,7 +370,7 @@ export function Footer() {
 						>
 							Termos de uso
 						</Link>
-						<Link
+						{/* <Link
 							href="#"
 							underline="none"
 							sx={{
@@ -374,7 +383,7 @@ export function Footer() {
 							}}
 						>
 							Cookies
-						</Link>
+						</Link> */}
 					</Box>
 				</Box>
 			</Container>

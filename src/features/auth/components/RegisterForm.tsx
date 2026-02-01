@@ -4,6 +4,7 @@ import {
 	Checkbox,
 	Container,
 	FormControlLabel,
+	Link,
 	TextField,
 	Typography,
 } from "@mui/material";
@@ -11,7 +12,7 @@ import {
 import type { AxiosError } from "axios";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { Link, useNavigate } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
 import type { LaravelValidationError } from "../../../api/instance";
 import { FormButton } from "../../../components/form/FormButton";
 import { PasswordInput } from "../../../components/form/PasswordInput";
@@ -109,8 +110,51 @@ export function RegisterForm() {
 					/>
 
 					<FormControlLabel
-						control={<Checkbox {...register("terms")} />}
-						label="Aceito os termos e condições"
+						control={
+							<Checkbox
+								{...register("terms")}
+								sx={{
+									color: "#0066FF",
+									"&.Mui-checked": {
+										color: "#0066FF",
+									},
+								}}
+							/>
+						}
+						label={
+							<Typography
+								variant="body2"
+								sx={{
+									color: "#6B7280",
+									fontSize: "0.9rem",
+								}}
+							>
+								Li e aceito os{" "}
+								<Link
+									component={RouterLink}
+									to="/termos-e-condicoes"
+									target="_blank"
+									rel="noopener noreferrer"
+									sx={{
+										color: "#0066FF",
+										fontWeight: 600,
+										textDecoration: "none",
+										"&:hover": {
+											textDecoration: "underline",
+										},
+									}}
+								>
+									Termos e Condições
+								</Link>
+							</Typography>
+						}
+						sx={{
+							alignItems: "center",
+
+							"& .MuiFormControlLabel-label": {
+								mt: 0.5,
+							},
+						}}
 					/>
 					{errors.terms && (
 						<Typography color="error" variant="body2">
@@ -127,7 +171,7 @@ export function RegisterForm() {
 					</FormButton>
 
 					<Typography variant="body2" align="center">
-						Já tem conta? <Link to="/login">Entrar</Link>
+						Já tem conta? <RouterLink to="/login">Entrar</RouterLink>
 					</Typography>
 				</Box>
 			</Container>

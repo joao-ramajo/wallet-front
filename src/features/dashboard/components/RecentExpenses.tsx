@@ -1,12 +1,5 @@
 import { InboxOutlined } from "@mui/icons-material";
-import {
-	Box,
-	Button,
-	Container,
-	Paper,
-	Stack,
-	Typography,
-} from "@mui/material";
+import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { instance } from "../../../api/instance";
 import { useExpenseModalContext } from "../context/ExpenseModalContextProvider";
 import { type Expense, useGetExpensesQuery } from "../hooks/useGetExpense";
@@ -108,123 +101,121 @@ export function RecentExpenses() {
 	const { selectAction } = useExpenseModalContext();
 
 	return (
-		<Box component="section" sx={{ py: { xs: 6, md: 10 } }}>
-			<Container maxWidth="lg">
-				{/* Header */}
-				<Box
-					sx={{
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: { xs: "flex-start", md: "center" },
-						mb: { xs: 3, md: 4 },
-						flexDirection: { xs: "column", md: "row" },
-						gap: 2,
-					}}
-				>
-					<Box>
-						<Typography
-							variant="h4"
-							sx={{
-								fontWeight: 700,
-								fontSize: { xs: "1.75rem", md: "2.125rem" },
-								mb: 0.5,
-							}}
-						>
-							Despesas recentes
-						</Typography>
-						{hasData && !isLoading && (
-							<Typography variant="body2" color="text.secondary">
-								{data.length}{" "}
-								{data.length === 1
-									? "despesa encontrada"
-									: "despesas encontradas"}
-							</Typography>
-						)}
-					</Box>
-
-					<Box
-						display="flex"
-						gap={{ xs: 1, sm: 2 }}
-						flexWrap="wrap"
-						sx={{ width: { xs: "100%", md: "auto" } }}
+		<>
+			{/* Header */}
+			<Box
+				sx={{
+					display: "flex",
+					justifyContent: "space-between",
+					alignItems: { xs: "flex-start", md: "center" },
+					mb: { xs: 3, md: 4 },
+					flexDirection: { xs: "column", md: "row" },
+					gap: 2,
+				}}
+			>
+				<Box>
+					<Typography
+						variant="h4"
+						sx={{
+							fontWeight: 700,
+							fontSize: { xs: "1.75rem", md: "2.125rem" },
+							mb: 0.5,
+						}}
 					>
-						<Button
-							variant="outlined"
-							size="medium"
-							sx={{
-								textTransform: "none",
-								fontWeight: 600,
-								flex: { xs: 1, sm: "0 1 auto" },
-								minWidth: { xs: "auto", sm: 120 },
-							}}
-							disabled={isLoading}
-							onClick={downloadExpensesCsv}
-						>
-							Exportar
-						</Button>
-						<Button
-							variant="outlined"
-							size="medium"
-							sx={{
-								textTransform: "none",
-								fontWeight: 600,
-								flex: { xs: 1, sm: "0 1 auto" },
-								minWidth: { xs: "auto", sm: 120 },
-							}}
-							disabled={isLoading}
-						>
-							Importar CSV
-						</Button>
-						<Button
-							variant="contained"
-							size="medium"
-							sx={{
-								textTransform: "none",
-								fontWeight: 600,
-								width: { xs: "100%", sm: "auto" },
-								minWidth: { sm: 140 },
-							}}
-							disabled={isLoading}
-							onClick={() => selectAction("create")}
-						>
-							Nova despesa
-						</Button>
-					</Box>
+						Despesas recentes
+					</Typography>
+					{hasData && !isLoading && (
+						<Typography variant="body2" color="text.secondary">
+							{data.length}{" "}
+							{data.length === 1
+								? "despesa encontrada"
+								: "despesas encontradas"}
+						</Typography>
+					)}
 				</Box>
 
-				{/* Loading State */}
-				{isLoading && (
-					<Stack spacing={2}>
-						<ExpenseItemSkeleton />
-						<ExpenseItemSkeleton />
-						<ExpenseItemSkeleton />
-					</Stack>
-				)}
+				<Box
+					display="flex"
+					gap={{ xs: 1, sm: 2 }}
+					flexWrap="wrap"
+					sx={{ width: { xs: "100%", md: "auto" } }}
+				>
+					<Button
+						variant="outlined"
+						size="medium"
+						sx={{
+							textTransform: "none",
+							fontWeight: 600,
+							flex: { xs: 1, sm: "0 1 auto" },
+							minWidth: { xs: "auto", sm: 120 },
+						}}
+						disabled={isLoading}
+						onClick={downloadExpensesCsv}
+					>
+						Exportar
+					</Button>
+					<Button
+						variant="outlined"
+						size="medium"
+						sx={{
+							textTransform: "none",
+							fontWeight: 600,
+							flex: { xs: 1, sm: "0 1 auto" },
+							minWidth: { xs: "auto", sm: 120 },
+						}}
+						disabled={isLoading}
+					>
+						Importar CSV
+					</Button>
+					<Button
+						variant="contained"
+						size="medium"
+						sx={{
+							textTransform: "none",
+							fontWeight: 600,
+							width: { xs: "100%", sm: "auto" },
+							minWidth: { sm: 140 },
+						}}
+						disabled={isLoading}
+						onClick={() => selectAction("create")}
+					>
+						Nova despesa
+					</Button>
+				</Box>
+			</Box>
 
-				{/* Loading State */}
-				{isLoading && (
-					<Stack spacing={2}>
-						<ExpenseItemSkeleton />
-						<ExpenseItemSkeleton />
-						<ExpenseItemSkeleton />
-					</Stack>
-				)}
+			{/* Loading State */}
+			{isLoading && (
+				<Stack spacing={2}>
+					<ExpenseItemSkeleton />
+					<ExpenseItemSkeleton />
+					<ExpenseItemSkeleton />
+				</Stack>
+			)}
 
-				{/* Error State */}
-				{isError && !isLoading && <ErrorState onRetry={refetch} />}
+			{/* Loading State */}
+			{isLoading && (
+				<Stack spacing={2}>
+					<ExpenseItemSkeleton />
+					<ExpenseItemSkeleton />
+					<ExpenseItemSkeleton />
+				</Stack>
+			)}
 
-				{/* Empty State */}
-				{!isLoading && !isError && !hasData && <EmptyState />}
+			{/* Error State */}
+			{isError && !isLoading && <ErrorState onRetry={refetch} />}
 
-				{/* Data State */}
-				{!isLoading && !isError && hasData && (
-					<Stack spacing={2}>
-						{data.map((expense: Expense) => (
-							<ExpenseItem key={expense.id} expense={expense} />
-						))}
-					</Stack>
-				)}
-			</Container>
-		</Box>
+			{/* Empty State */}
+			{!isLoading && !isError && !hasData && <EmptyState />}
+
+			{/* Data State */}
+			{!isLoading && !isError && hasData && (
+				<Stack spacing={2}>
+					{data.map((expense: Expense) => (
+						<ExpenseItem key={expense.id} expense={expense} />
+					))}
+				</Stack>
+			)}
+		</>
 	);
 }

@@ -5,6 +5,7 @@ import { RegisterPage } from "./features/auth/pages/RegisterPage";
 import { DashbaordPage } from "./features/dashboard/pages/DashboardPage";
 import { AboutPage } from "./features/landing/pages/AboutPage";
 import { Home } from "./features/landing/pages/Home";
+import { TermsPage } from "./features/landing/pages/TermsPage";
 import { PrivateRoute } from "./router/PrivateRoute";
 
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
 						}
 					/>
 					<Route path="/apoie" element={<AboutPage />} />
+					<Route path="/termos-e-condicoes" element={<TermsPage />} />
 				</Routes>
 			</MainLayout>
 		</BrowserRouter>
