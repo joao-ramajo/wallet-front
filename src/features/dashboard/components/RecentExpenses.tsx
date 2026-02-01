@@ -152,9 +152,9 @@ export function RecentExpenses() {
 						disabled={isLoading}
 						onClick={downloadExpensesCsv}
 					>
-						Exportar
+						Exportar Backup
 					</Button>
-					<Button
+					{/* <Button
 						variant="outlined"
 						size="medium"
 						sx={{
@@ -166,7 +166,7 @@ export function RecentExpenses() {
 						disabled={isLoading}
 					>
 						Importar CSV
-					</Button>
+					</Button> */}
 					<Button
 						variant="contained"
 						size="medium"
