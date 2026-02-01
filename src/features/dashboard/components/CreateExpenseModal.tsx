@@ -13,9 +13,13 @@ import {
 	DialogActions,
 	DialogContent,
 	DialogTitle,
+	FormControl,
 	FormLabel,
 	IconButton,
 	InputAdornment,
+	InputLabel,
+	MenuItem,
+	Select,
 	Slide,
 	TextField,
 	ToggleButton,
@@ -37,6 +41,7 @@ import {
 	type CreateExpenseFormData,
 	createExpenseSchema,
 } from "../schemas/createExpense.schema";
+import { useGetCategoryListQuery } from "../hooks/useGetCategoryListQuery";
 
 type CreateExpenseModalProps = {
 	open: boolean;
@@ -74,6 +79,7 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 	const amount = watch("amount");
 
 	const { mutateAsync } = useCreateExpenseMutation();
+	const { data, isLoading } = useGetCategoryListQuery();
 	const queryClient = useQueryClient();
 
 	function handleAmountChange(value: string) {
@@ -206,6 +212,22 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 							<Schedule sx={{ mr: 1 }} /> Pendente
 						</ToggleButton>
 					</ToggleButtonGroup>
+
+					<FormControl fullWidth>
+						<InputLabel id="category-label">Categoria</InputLabel>
+						<Select
+							labelId="category-label"
+							label="Categoria"
+							// value={category}
+							// onChange={(e) => setCategory(e.target.value)}
+						>
+							{data?.map((category) => (
+								<>
+									<MenuItem value="" key={category.id}>{category.name}</MenuItem>
+								</>
+							))}
+						</Select>
+					</FormControl>
 				</DialogContent>
 
 				<DialogActions>
