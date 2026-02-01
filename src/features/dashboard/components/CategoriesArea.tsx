@@ -1,15 +1,12 @@
 // CategoriesArea.tsx
 import AddIcon from "@mui/icons-material/Add";
 import CategoryIcon from "@mui/icons-material/Category";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import {
 	Box,
 	Button,
 	Card,
 	CardContent,
 	Chip,
-	IconButton,
 	Typography,
 } from "@mui/material";
 import { useCategoryModalContext } from "../context/CategoryModalContextProvider";

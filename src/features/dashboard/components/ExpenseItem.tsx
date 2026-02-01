@@ -1,9 +1,7 @@
 import {
-	AttachMoney,
 	CalendarMonth,
 	Category as CategoryIcon,
 	CheckCircle,
-	Delete,
 	Edit,
 	Schedule,
 } from "@mui/icons-material";
