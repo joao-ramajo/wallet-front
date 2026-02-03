@@ -27,8 +27,6 @@ export function DeleteAccountDialog({
 	const CONFIRM_TEXT = "EXCLUIR";
 
 	const handleDelete = () => {
-		// Implementar a exclusão da conta
-		console.log("Deletando conta...");
 		onClose();
 	};
 

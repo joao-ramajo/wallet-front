@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const updateExpenseSchema = z.object({
-	id: z.number(),
+	id: z.number().optional(),
 	title: z.string().min(1, "A descrição é obrigatória"),
 	amount: z
 		.number()
@@ -9,7 +9,7 @@ export const updateExpenseSchema = z.object({
 		.positive("Valor deve ser maior que zero"),
 	type: z.enum(["income", "expense"]),
 	status: z.enum(["paid", "pending", "overdue"]),
-	category_id: z.string().nullable(),
+	category_id: z.number().nullable().optional(),
 });
 
 export type UpdateExpenseFormData = z.infer<typeof updateExpenseSchema>;

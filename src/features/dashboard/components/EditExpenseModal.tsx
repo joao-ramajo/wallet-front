@@ -29,7 +29,6 @@ import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { LaravelValidationError } from "../../../api/instance";
-import { FormSelect } from "../../../components/form/FormSelect";
 import { useGetCategoryListQuery } from "../hooks/useGetCategoryListQuery";
 import type { Expense } from "../hooks/useGetExpense";
 import {
@@ -40,6 +39,7 @@ import {
 	type UpdateExpenseFormData,
 	updateExpenseSchema,
 } from "../schemas/updateExpense.schema";
+import { CategoriesSelect } from "./CategoriesSelect";
 
 type EditExpenseModalProps = {
 	open: boolean;
@@ -70,6 +70,10 @@ export function EditExpenseModal({
 		setError,
 	} = useForm<UpdateExpenseFormData>({
 		resolver: zodResolver(updateExpenseSchema),
+		defaultValues: {
+			id: 0,
+			category_id: null,
+		},
 	});
 
 	const [amountDisplay, setAmountDisplay] = useState("");
@@ -103,10 +107,7 @@ export function EditExpenseModal({
 		setValue("status", expense.status);
 
 		setValue("amount", expense.amount);
-		setValue("category_id", expense.category_id);
-
-		console.log(expense);
-		// console.log(register);
+		setValue("category_id", expense.category_id ?? null);
 
 		const formatted = (expense.amount / 100).toLocaleString("pt-BR", {
 			style: "currency",
@@ -163,6 +164,7 @@ export function EditExpenseModal({
 			TransitionComponent={Transition}
 		>
 			<form onSubmit={handleSubmit(onSubmit)}>
+			{/* <form onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}> */}
 				<DialogTitle sx={{ display: "flex", justifyContent: "space-between" }}>
 					<Typography fontWeight={700}>Nova movimentação</Typography>
 					<IconButton onClick={handleClose}>
@@ -236,13 +238,10 @@ export function EditExpenseModal({
 						name="category_id"
 						control={control}
 						render={({ field }) => (
-							<FormSelect
-								label="Categoria"
-								value={field.value ?? ""}
+							<CategoriesSelect
+								value={field.value ?? null}
 								onChange={field.onChange}
-								emptyLabel="Sem categoria"
-								options={data || []}
-								getLabel={(cat) => cat.name}
+								categories={data || []}
 							/>
 						)}
 					/>

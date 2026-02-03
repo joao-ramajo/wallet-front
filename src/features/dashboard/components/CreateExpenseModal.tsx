@@ -26,10 +26,9 @@ import type { TransitionProps } from "@mui/material/transitions";
 import { useQueryClient } from "@tanstack/react-query";
 import type { AxiosError } from "axios";
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { LaravelValidationError } from "../../../api/instance";
-import { FormSelect } from "../../../components/form/FormSelect";
 import {
 	type CreateExpenseResponse,
 	useCreateExpenseMutation,
@@ -39,6 +38,7 @@ import {
 	type CreateExpenseFormData,
 	createExpenseSchema,
 } from "../schemas/createExpense.schema";
+import { CategoriesSelect } from "./CategoriesSelect";
 
 type CreateExpenseModalProps = {
 	open: boolean;
@@ -60,6 +60,7 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 		watch,
 		formState: { errors },
 		reset,
+		control,
 		setError,
 	} = useForm<CreateExpenseFormData>({
 		resolver: zodResolver(createExpenseSchema),
@@ -71,7 +72,6 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 	});
 
 	const [amountDisplay, setAmountDisplay] = useState("");
-	const [categoryId, setCategoryId] = useState<string>("");
 
 	const type = watch("type");
 	const status = watch("status");
@@ -96,39 +96,35 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 	}
 
 	function onSubmit(data: CreateExpenseFormData) {
-		setValue("category_id", categoryId);
-		mutateAsync(
-			{ ...data, category_id: categoryId ? categoryId : null },
-			{
-				onSuccess: (response: CreateExpenseResponse) => {
-					toast.success(response.message);
-					queryClient.invalidateQueries({
-						queryKey: ["dashboard-expenses"],
-					});
-					queryClient.invalidateQueries({
-						queryKey: ["dashboard-summary"],
-					});
-					handleClose();
-				},
-				onError: (error: AxiosError<LaravelValidationError>) => {
-					const status = error.response?.status;
-					const apiError = error.response?.data;
-
-					if (status === 422 && apiError?.errors) {
-						Object.entries(apiError.errors).forEach(([field, messages]) => {
-							setError(field as keyof CreateExpenseFormData, {
-								type: "server",
-								message: messages[0],
-							});
-						});
-					} else if (apiError?.message && status === 400) {
-						toast.error(apiError.message);
-					} else {
-						toast.error("Erro inesperado");
-					}
-				},
+		mutateAsync(data, {
+			onSuccess: (response: CreateExpenseResponse) => {
+				toast.success(response.message);
+				queryClient.invalidateQueries({
+					queryKey: ["dashboard-expenses"],
+				});
+				queryClient.invalidateQueries({
+					queryKey: ["dashboard-summary"],
+				});
+				handleClose();
 			},
-		);
+			onError: (error: AxiosError<LaravelValidationError>) => {
+				const status = error.response?.status;
+				const apiError = error.response?.data;
+
+				if (status === 422 && apiError?.errors) {
+					Object.entries(apiError.errors).forEach(([field, messages]) => {
+						setError(field as keyof CreateExpenseFormData, {
+							type: "server",
+							message: messages[0],
+						});
+					});
+				} else if (apiError?.message && status === 400) {
+					toast.error(apiError.message);
+				} else {
+					toast.error("Erro inesperado");
+				}
+			},
+		});
 	}
 
 	function handleClose() {
@@ -216,12 +212,16 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 						</ToggleButton>
 					</ToggleButtonGroup>
 
-					<FormSelect
-						label="Categoria"
-						value={categoryId}
-						onChange={setCategoryId}
-						options={data || []}
-						getLabel={(cat) => cat.name}
+					<Controller
+						name="category_id"
+						control={control}
+						render={({ field }) => (
+							<CategoriesSelect
+								value={field.value ?? null}
+								onChange={field.onChange}
+								categories={data || []}
+							/>
+						)}
 					/>
 				</DialogContent>
 
