@@ -80,7 +80,7 @@ export function EditExpenseModal({
 	const type = watch("type");
 	const status = watch("status");
 
-	const { mutateAsync } = useUpdateExpenseMutation();
+	const { mutateAsync, isPending: isLoading } = useUpdateExpenseMutation();
 	const { data } = useGetCategoryListQuery();
 	const queryClient = useQueryClient();
 
@@ -164,7 +164,7 @@ export function EditExpenseModal({
 			TransitionComponent={Transition}
 		>
 			<form onSubmit={handleSubmit(onSubmit)}>
-			{/* <form onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}> */}
+				{/* <form onSubmit={handleSubmit(onSubmit, (e) => console.log(e))}> */}
 				<DialogTitle sx={{ display: "flex", justifyContent: "space-between" }}>
 					<Typography fontWeight={700}>Nova movimentação</Typography>
 					<IconButton onClick={handleClose}>
@@ -248,8 +248,8 @@ export function EditExpenseModal({
 				</DialogContent>
 
 				<DialogActions>
-					<Button onClick={handleClose}>Cancelar</Button>
-					<Button type="submit" variant="contained">
+					<Button onClick={handleClose} disabled={isLoading}>Cancelar</Button>
+					<Button type="submit" variant="contained" loading={isLoading}>
 						Salvar
 					</Button>
 				</DialogActions>

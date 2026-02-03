@@ -51,7 +51,7 @@ export function CreateCategoryModal({
 	const [name, setName] = useState("");
 	const [selectedColor, setSelectedColor] = useState(PRESET_COLORS[0]);
 
-	const { mutateAsync } = useCraeteCategoryMutation();
+	const { mutateAsync, isPending: isLoading } = useCraeteCategoryMutation();
 	const queryClient = useQueryClient();
 	function handleClose() {
 		setName("");
@@ -226,6 +226,7 @@ export function CreateCategoryModal({
 							borderRadius: 2,
 							px: 3,
 						}}
+						disabled={isLoading}
 					>
 						Cancelar
 					</Button>
@@ -233,6 +234,7 @@ export function CreateCategoryModal({
 						type="submit"
 						variant="contained"
 						disabled={!name.trim()}
+						loading={isLoading}
 						sx={{
 							textTransform: "none",
 							borderRadius: 2,

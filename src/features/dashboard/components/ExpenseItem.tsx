@@ -1,7 +1,8 @@
 import {
-	CalendarMonth,
+	AttachMoney,
 	Category as CategoryIcon,
 	CheckCircle,
+	Delete,
 	Edit,
 	Schedule,
 } from "@mui/icons-material";
@@ -18,7 +19,10 @@ import {
 } from "@mui/material";
 import { formatCurrency } from "../../../utils/formatCurrency";
 import { useExpenseModalContext } from "../context/ExpenseModalContextProvider";
+import { useDeleteExpenseMutation } from "../hooks/useDeleteExpenseMutation";
 import type { Expense } from "../hooks/useGetExpense";
+import { useMarkExpenseAsPaidMutation } from "../hooks/useMarkExpenseAsPaidMutation";
+import { ExpenseItemSkeleton } from "./ExpenseItemSkeleton";
 
 type ExpenseItemProps = {
 	expense: Expense;
@@ -61,6 +65,14 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 	};
 
 	const { selectAction } = useExpenseModalContext();
+	const { mutateAsync: markPaid, isPending: markAsPaidIsLoading } =
+		useMarkExpenseAsPaidMutation();
+	const { mutateAsync: deleteExpense, isPending: deleteExpenseIsLoading } =
+		useDeleteExpenseMutation();
+
+	if (markAsPaidIsLoading || deleteExpenseIsLoading) {
+		return <ExpenseItemSkeleton />;
+	}
 
 	return (
 		<Paper
@@ -137,21 +149,26 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 						</IconButton>
 					</Tooltip>
 
-					{/* <Tooltip title="Marcar como pago">
-						<IconButton size="small" onClick={() => console.log()}>
-							<AttachMoney fontSize="small" />
-						</IconButton>
-					</Tooltip>
+					{expense.status !== "paid" && (
+						<Tooltip title="Marcar como pago">
+							<IconButton
+								size="small"
+								onClick={() => markPaid({ id: expense.id })}
+							>
+								<AttachMoney fontSize="small" />
+							</IconButton>
+						</Tooltip>
+					)}
 
 					<Tooltip title="Excluir">
 						<IconButton
 							size="small"
 							color="error"
-							onClick={() => console.log()}
+							onClick={() => deleteExpense({ id: expense.id })}
 						>
 							<Delete fontSize="small" />
 						</IconButton>
-					</Tooltip> */}
+					</Tooltip>
 				</Stack>
 			</Box>
 			<Box
@@ -192,7 +209,7 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 					}}
 				>
 					{/* Data de Vencimento */}
-					<Box display="flex" alignItems="center" gap={0.75}>
+					{/* <Box display="flex" alignItems="center" gap={0.75}>
 						<CalendarMonth
 							sx={{
 								fontSize: 16,
@@ -228,7 +245,7 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 								{formatDate(expense.due_date)}
 							</Typography>
 						</Box>
-					</Box>
+					</Box> */}
 
 					{/* Data de Pagamento */}
 					{expense.payment_date && (
@@ -286,7 +303,7 @@ export function ExpenseItem({ expense, onClick }: ExpenseItemProps) {
 									color: "warning.main",
 								}}
 							>
-								Aguardando
+								Aguardando pagamento
 							</Typography>
 						</Box>
 					)}

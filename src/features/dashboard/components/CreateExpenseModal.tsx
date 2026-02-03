@@ -77,7 +77,7 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 	const status = watch("status");
 	const amount = watch("amount");
 
-	const { mutateAsync } = useCreateExpenseMutation();
+	const { mutateAsync, isPending: isLoading } = useCreateExpenseMutation();
 	const { data } = useGetCategoryListQuery();
 	const queryClient = useQueryClient();
 
@@ -98,13 +98,13 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 	function onSubmit(data: CreateExpenseFormData) {
 		mutateAsync(data, {
 			onSuccess: (response: CreateExpenseResponse) => {
-				toast.success(response.message);
 				queryClient.invalidateQueries({
 					queryKey: ["dashboard-expenses"],
 				});
 				queryClient.invalidateQueries({
 					queryKey: ["dashboard-summary"],
 				});
+				toast.success(response.message);
 				handleClose();
 			},
 			onError: (error: AxiosError<LaravelValidationError>) => {
@@ -226,11 +226,14 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 				</DialogContent>
 
 				<DialogActions>
-					<Button onClick={handleClose}>Cancelar</Button>
+					<Button onClick={handleClose} disabled={isLoading}>
+						Cancelar
+					</Button>
 					<Button
 						type="submit"
 						variant="contained"
 						disabled={!watch("title") || !amount}
+						loading={isLoading}
 					>
 						Salvar
 					</Button>
