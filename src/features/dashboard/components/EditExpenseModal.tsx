@@ -40,6 +40,8 @@ import {
 	updateExpenseSchema,
 } from "../schemas/updateExpense.schema";
 import { CategoriesSelect } from "./CategoriesSelect";
+import { useGetSourceQuery } from "../hooks/useGetSourceListQuery";
+import { SourcesSelect } from "./SourcesSelect";
 
 type EditExpenseModalProps = {
 	open: boolean;
@@ -73,6 +75,7 @@ export function EditExpenseModal({
 		defaultValues: {
 			id: 0,
 			category_id: null,
+			source_id: null,
 		},
 	});
 
@@ -82,6 +85,7 @@ export function EditExpenseModal({
 
 	const { mutateAsync, isPending: isLoading } = useUpdateExpenseMutation();
 	const { data } = useGetCategoryListQuery();
+	const { data: sourceListData } = useGetSourceQuery();
 	const queryClient = useQueryClient();
 
 	function handleAmountChange(value: string) {
@@ -108,6 +112,7 @@ export function EditExpenseModal({
 
 		setValue("amount", expense.amount);
 		setValue("category_id", expense.category_id ?? null);
+		setValue("source_id", expense.source_id ?? null);
 
 		const formatted = (expense.amount / 100).toLocaleString("pt-BR", {
 			style: "currency",
@@ -242,6 +247,17 @@ export function EditExpenseModal({
 								value={field.value ?? null}
 								onChange={field.onChange}
 								categories={data || []}
+							/>
+						)}
+					/>
+					<Controller
+						name="source_id"
+						control={control}
+						render={({ field }) => (
+							<SourcesSelect
+								value={field.value ?? null}
+								onChange={field.onChange}
+								sources={sourceListData || []}
 							/>
 						)}
 					/>
