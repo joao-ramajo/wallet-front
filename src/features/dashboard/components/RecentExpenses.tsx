@@ -100,28 +100,28 @@ export function RecentExpenses() {
 	const hasData = data && data.length > 0;
 	const { selectAction } = useExpenseModalContext();
 
-	const mutateImport = async (formData: FormData) => {
-		await instance.post("/dashboard/spreadsheet/csv/import", formData, {
-			headers: { "Content-Type": "multipart/form-data" },
-		});
-	};
+	// const mutateImport = async (formData: FormData) => {
+	// 	await instance.post("/dashboard/spreadsheet/csv/import", formData, {
+	// 		headers: { "Content-Type": "multipart/form-data" },
+	// 	});
+	// };
 
 	return (
 		<>
 			{/* Header */}
-			<input
-				type="file"
-				accept=".csv"
-				onChange={(e) => {
-					const file = e.target.files?.[0];
-					if (!file) return;
+			{/* <input
+				// type="file"
+				// accept=".csv"
+				// onChange={(e) => {
+				// 	const file = e.target.files?.[0];
+				// 	if (!file) return;
 
-					const formData = new FormData();
-					formData.append("file", file);
+				// 	const formData = new FormData();
+				// 	formData.append("file", file);
 
-					mutateImport(formData);
-				}}
-			/>
+				// 	mutateImport(formData);
+				// }}
+			/> */}
 			<Box
 				sx={{
 					display: "flex",
