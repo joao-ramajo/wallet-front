@@ -197,13 +197,19 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 						onChange={(e) => handleAmountChange(e.target.value)}
 						inputMode="numeric"
 						placeholder="R$ 0,00"
-						InputProps={{
-							inputMode: "numeric",
-							startAdornment: (
-								<InputAdornment position="start">
-									<AttachMoney />
-								</InputAdornment>
-							),
+						slotProps={{
+							input: {
+								// Props do componente Input (substitui InputProps)
+								startAdornment: (
+									<InputAdornment position="start">
+										<AttachMoney />
+									</InputAdornment>
+								),
+							},
+							htmlInput: {
+								inputMode: "numeric",
+								pattern: "[0-9]*",
+							},
 						}}
 						error={!!errors.amount}
 						helperText={errors.amount?.message}
