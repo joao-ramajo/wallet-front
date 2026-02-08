@@ -222,7 +222,6 @@ export function EditExpenseModal({
 							},
 							htmlInput: {
 								inputMode: "numeric",
-								pattern: "[0-9]*",
 							},
 						}}
 						error={!!errors.amount}

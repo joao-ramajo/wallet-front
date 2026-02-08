@@ -6,6 +6,7 @@ type RecentExpensesActionsProps = {
 	isLoading: boolean;
 	total: number;
 	downloadExpensesCsv: () => void;
+	downloadExpensesXlsx: () => void;
 };
 
 export const RecentExpensesActions = ({
@@ -13,6 +14,7 @@ export const RecentExpensesActions = ({
 	isLoading,
 	total,
 	downloadExpensesCsv,
+	downloadExpensesXlsx,
 }: RecentExpensesActionsProps) => {
 	const { selectAction } = useExpenseModalContext();
 	return (
@@ -64,6 +66,20 @@ export const RecentExpensesActions = ({
 					onClick={downloadExpensesCsv}
 				>
 					Exportar Backup
+				</Button>
+				<Button
+					variant="outlined"
+					size="medium"
+					sx={{
+						textTransform: "none",
+						fontWeight: 600,
+						flex: { xs: 1, sm: "0 1 auto" },
+						minWidth: { xs: "auto", sm: 120 },
+					}}
+					disabled={isLoading}
+					onClick={downloadExpensesXlsx}
+				>
+					Exportar Excel
 				</Button>
 				<Button
 					variant="contained"

@@ -2,6 +2,7 @@ import { InboxOutlined } from "@mui/icons-material";
 import { Box, Button, Paper, Stack, Typography } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
 import { useDownloadExpensesCsv } from "../hooks/useDownloadExpensesCsv";
+import { downloadExpensesXlsx } from "../hooks/useDownloadExpensesXlsx";
 import { type Expense, useGetExpensesQuery } from "../hooks/useGetExpense";
 import { ErrorState } from "./ErrorState";
 import { ExpenseItem } from "./ExpenseItem";
@@ -76,6 +77,7 @@ export function RecentExpenses() {
 				isLoading={isLoading}
 				total={total ?? 0}
 				downloadExpensesCsv={useDownloadExpensesCsv}
+				downloadExpensesXlsx={downloadExpensesXlsx}
 			/>
 			<RecentExpensesFilter
 				value={statusFilter}
