@@ -195,6 +195,7 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 						fullWidth
 						value={amountDisplay}
 						onChange={(e) => handleAmountChange(e.target.value)}
+						inputMode="numeric"
 						placeholder="R$ 0,00"
 						InputProps={{
 							startAdornment: (
