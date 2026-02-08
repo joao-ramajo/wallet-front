@@ -212,12 +212,18 @@ export function EditExpenseModal({
 						value={amountDisplay}
 						onChange={(e) => handleAmountChange(e.target.value)}
 						placeholder="R$ 0,00"
-						InputProps={{
-							startAdornment: (
-								<InputAdornment position="start">
-									<AttachMoney />
-								</InputAdornment>
-							),
+						slotProps={{
+							input: {
+								startAdornment: (
+									<InputAdornment position="start">
+										<AttachMoney />
+									</InputAdornment>
+								),
+							},
+							htmlInput: {
+								inputMode: "numeric",
+								pattern: "[0-9]*",
+							},
 						}}
 						error={!!errors.amount}
 						helperText={errors.amount?.message}
