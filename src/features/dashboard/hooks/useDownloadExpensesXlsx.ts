@@ -3,7 +3,7 @@ import { instance } from "../../../api/instance";
 
 export async function downloadExpensesXlsx() {
 	try {
-		const response = await instance.get("/dashboard/spreadsheet/xlsx/import", {
+		const response = await instance.get("/dashboard/spreadsheet/xlsx/export", {
 			responseType: "blob",
 		});
 
