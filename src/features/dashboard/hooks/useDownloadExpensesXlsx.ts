@@ -21,8 +21,9 @@ export async function downloadExpensesXlsx() {
 		filename = `relatorio_de_gastos${timestamp}.xlsx`;
 
 		const blob = new Blob([response.data], {
-			type: "text/xlsx;charset=utf-8;",
+			type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
 		});
+
 		const url = window.URL.createObjectURL(blob);
 
 		const a = document.createElement("a");
