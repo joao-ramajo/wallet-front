@@ -198,6 +198,7 @@ export function CreateExpenseModal({ open, onClose }: CreateExpenseModalProps) {
 						inputMode="numeric"
 						placeholder="R$ 0,00"
 						InputProps={{
+							inputMode: "numeric",
 							startAdornment: (
 								<InputAdornment position="start">
 									<AttachMoney />
